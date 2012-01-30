@@ -1,4 +1,6 @@
 import json
+import pytest
+
 
 def pytest_addoption(parser):
     parser.addini('couchdbkit_backend', 'socketpool backend we should use', default='thread')
@@ -12,7 +14,10 @@ def pytest_funcarg__couchdb(request):
     from couchdbkit import ViewResults, View
     server = request.getfuncargvalue('couchdb_server')
     tmpdir = request.getfuncargvalue('tmpdir')
-    dbname = 'pytest_' + request.config.getini('couchdbkit_suffix')
+    suffix = request.config.getini('couchdbkit_suffix')
+    if not suffix:
+        pytest.fail('no couchdbkit_suffix set in ini')
+    dbname = 'pytest_' + suffix
     db = server.get_or_create_db(dbname)
     db.flush()
 
