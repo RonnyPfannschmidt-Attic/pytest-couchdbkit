@@ -19,9 +19,9 @@ def pytest_funcarg__couchdb(request):
     def finalize_db():
         view = View(db, '_all_docs')
         items = ViewResults(view, include_docs='true').all()
-        with tmpdir.join('_couchdb.json').open('w') as fp:
+        with tmpdir.join('_couchdb.json-lines').open('w') as fp:
             for item in items:
-                fp.write(json.dumps(item['doc'], sort_keys=1, indent=2) + '\n\n')
+                fp.write(json.dumps(item['doc'], sort_keys=1) + '\n')
     request.addfinalizer(finalize_db)
     return db
     
