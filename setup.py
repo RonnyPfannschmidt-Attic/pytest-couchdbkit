@@ -8,6 +8,12 @@ setup(
     author='RonnyPfannschmidt',
     author_email='ronny.pfannschmidt@gmx.de',
 
+    entry_points = {
+        'pytest11': [
+            'couchdbkit = pytest_couchdbkit'
+        ]
+    },
+
     requires=[
         'pytest',
         'couchdbkit',
