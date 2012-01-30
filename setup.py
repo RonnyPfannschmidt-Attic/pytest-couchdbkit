@@ -6,7 +6,7 @@ setup(
     description='py.test extension for per-test couchdb databases using couchdbkit',
 
     author='RonnyPfannschmidt',
-    author_mail='ronny.pfannschmidt@gmx.de',
+    author_email='ronny.pfannschmidt@gmx.de',
 
     requires=[
         'pytest',
