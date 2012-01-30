@@ -8,6 +8,8 @@ setup(
     author='RonnyPfannschmidt',
     author_email='ronny.pfannschmidt@gmx.de',
 
+    url='http://bitbucket.prg/RonnyPfannschmidt/pytest-couchdbkit',
+
     entry_points = {
         'pytest11': [
             'couchdbkit = pytest_couchdbkit'
