@@ -3,7 +3,7 @@ from 0.1 to 0.2
 
 - use json-lines as extension for the dump
 - condense json to one line per document for humanly acceptable parsinig
-
+- fail if no couchdbkit_prefix is set
 
 0.1
 ---
