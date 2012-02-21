@@ -9,6 +9,9 @@ setup(
     author_email='ronny.pfannschmidt@gmx.de',
 
     url='http://bitbucket.prg/RonnyPfannschmidt/pytest-couchdbkit',
+    packages=[
+        'pytest_couchdbkit',
+    ],
 
     entry_points = {
         'pytest11': [
