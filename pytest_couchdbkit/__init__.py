@@ -1,6 +1,7 @@
 import json
 import pytest
 
+from .dumper import dump_db
 
 def pytest_addoption(parser):
     parser.addini('couchdbkit_backend', 'socketpool backend we should use', default='thread')
@@ -22,11 +23,7 @@ def pytest_funcarg__couchdb(request):
     db.flush()
 
     def finalize_db():
-        view = View(db, '_all_docs')
-        items = ViewResults(view, include_docs='true').all()
-        with tmpdir.join('_couchdb.json-lines').open('w') as fp:
-            for item in items:
-                fp.write(json.dumps(item['doc'], sort_keys=1) + '\n')
+        dump_db(db, str(tmpdir.join('couchdb.dump')))
     request.addfinalizer(finalize_db)
     return db
     
