@@ -1,3 +1,10 @@
+from 0.2 to 0.2
+---------------
+- switch dump format to chunked encoding
+- pretty json in dumps
+- attachments in dumps
+
+
 from 0.1 to 0.2
 ---------------
 
