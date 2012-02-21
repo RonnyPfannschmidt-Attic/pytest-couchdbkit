@@ -8,8 +8,13 @@ def iter_docs(db):
     view = db.view('_all_docs',  include_docs='true')
     return view.all()
 
-def iter_attachments(db, item):
-    return ()
+def items(db):
+    for item in iter_docs(db):
+        yield item
+
+        attachments = item.get('_attachments', [])
+        for name in attachments:
+            yield db.fetch_attachment(item, name)
 
 
 def writechunk(fp, data):
@@ -23,18 +28,10 @@ def writechunk(fp, data):
 def dump_db(db, dest):
     fp = open(dest, 'w')
     writechunk(fp, {
-        'dest': dest,
         'db': db.info(),
     })
-
-
-    
-
-    for item in iter_docs(db):
+    for item in items(db):
         writechunk(fp, item)
-
-        attachments = item.get('_attachments', [])
-        for name in attachments:
-            data = db.fetch_attachment(item, name)
-            writechunk(fp, data)
     fp.close()
+
+
