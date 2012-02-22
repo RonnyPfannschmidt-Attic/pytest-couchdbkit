@@ -4,10 +4,6 @@ import re
 
 from couchdbkit import View, ViewResults
 
-def iter_docs(db):
-    view = db.view('_all_docs',  include_docs='true')
-    return view.all()
-
 def items(db):
     rows = db.all_docs(include_docs='true')
     for row in rows:
@@ -37,11 +33,10 @@ def load_dump(fp, db):
     for doc in items:
         item = json.loads(doc)
         del item['_rev']
-        attachments = item.get('_attachments', ())
-        for name in sorted(attachments):
-            data = next(items)
-            attachments[name]['data'] = data
-            del attachments[name]['stub']
+        attachments = item.get('_attachments', {}).items()
+        for name, meta in sorted(attachments):
+            meta['data'] = next(items)
+            del meta['stub']
         db.save_doc(item, batch='ok')
 
     db.ensure_full_commit()

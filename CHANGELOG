@@ -3,6 +3,7 @@ from 0.2 to 0.3
 - switch dump format to chunked encoding
 - pretty json in dumps
 - attachments in dumps
+- utilities for loading dumps back to a database
 
 
 from 0.1 to 0.2
