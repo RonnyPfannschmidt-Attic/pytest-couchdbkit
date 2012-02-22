@@ -9,7 +9,7 @@ def test_items_simple(couchdb):
 
     doc = {'_id': 'test'}
     couchdb.save_doc(doc)
-    
+
     first = list(items(couchdb))
     assert len(first) == 1
     assert first[0] == doc

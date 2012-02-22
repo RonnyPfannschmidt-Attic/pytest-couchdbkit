@@ -27,4 +27,4 @@ def pytest_funcarg__couchdb(request):
             dump_db(db, fp)
     request.addfinalizer(finalize_db)
     return db
-    
+
