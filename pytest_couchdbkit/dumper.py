@@ -9,8 +9,7 @@ def iter_docs(db):
     return view.all()
 
 def items(db):
-    viewres = db.view('_all_docs',  include_docs='true')
-    rows = viewres.all()
+    rows = db.all_docs(include_docs='true')
     for row in rows:
         item = row['doc']
         yield item
