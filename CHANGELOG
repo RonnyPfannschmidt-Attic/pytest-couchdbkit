@@ -1,4 +1,4 @@
-from 0.2 to 0.2
+from 0.2 to 0.3
 ---------------
 - switch dump format to chunked encoding
 - pretty json in dumps
