@@ -1,6 +1,6 @@
 from io import BytesIO
 import json
-
+import re
 
 from couchdbkit import View, ViewResults
 
@@ -37,12 +37,13 @@ def load_dump(fp, db):
     info = next(items)
     for doc in items:
         item = json.loads(doc)
-        #XXX: evil hack
-        attachments = item.pop('_attachments', [])
-        db.save_doc(item)
+        del item['_rev']
+        attachments = item.get('_attachments', ())
         for name in sorted(attachments):
-            print 'attach', item['_id'], name
-            db.put_attachment(item, next(items), name=name) #XXX rest of the metadata
+            data = next(items)
+            attachments[name]['data'] = data
+            del attachments[name]['stub']
+        db.save_doc(item)
 
 
 
