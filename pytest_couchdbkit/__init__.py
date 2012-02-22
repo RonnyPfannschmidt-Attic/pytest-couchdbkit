@@ -23,7 +23,8 @@ def pytest_funcarg__couchdb(request):
     db.flush()
 
     def finalize_db():
-        dump_db(db, str(tmpdir.join('couchdb.dump')))
+        with tmpdir.join('couchdb.dump').open('w') as fp:
+            dump_db(db, fp)
     request.addfinalizer(finalize_db)
     return db
     

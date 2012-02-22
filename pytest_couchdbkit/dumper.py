@@ -9,12 +9,41 @@ def iter_docs(db):
     return view.all()
 
 def items(db):
-    for item in iter_docs(db):
+    viewres = db.view('_all_docs',  include_docs='true')
+    rows = viewres.all()
+    for row in rows:
+        item = row['doc']
         yield item
 
         attachments = item.get('_attachments', [])
-        for name in attachments:
-            yield db.fetch_attachment(item, name)
+        for name in sorted(attachments):
+            #XXX: unicode when not stream?!
+            yield db.fetch_attachment(item, name,stream=True).read()
+
+def readchunkdata(fp):
+    size = fp.readline().rstrip()
+    if not size:
+        return None
+    assert size.isdigit()
+    data = fp.read(int(size))
+    fp.read(2) # \r\n
+    return data
+
+def iter_dump(fp):
+    return iter(lambda: readchunkdata(fp), None)
+
+def load_dump(fp, db):
+    items = iter_dump(fp)
+    info = next(items)
+    for doc in items:
+        item = json.loads(doc)
+        #XXX: evil hack
+        attachments = item.pop('_attachments', [])
+        db.save_doc(item)
+        for name in sorted(attachments):
+            print 'attach', item['_id'], name
+            db.put_attachment(item, next(items), name=name) #XXX rest of the metadata
+
 
 
 def writechunk(fp, data):
@@ -25,13 +54,9 @@ def writechunk(fp, data):
     fp.write('\r\n')
 
 
-def dump_db(db, dest):
-    fp = open(dest, 'w')
-    writechunk(fp, {
-        'db': db.info(),
-    })
+def dump_db(db, fp):
+    writechunk(fp, db.info())
     for item in items(db):
         writechunk(fp, item)
-    fp.close()
 
 
