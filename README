@@ -1,3 +1,10 @@
+pytest-couchdbkit
+=================
+
+:name: pytest-couchdbkit
+:description: test
+
+
 from 0.2 to 0.3
 ---------------
 - switch dump format to chunked encoding
