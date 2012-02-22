@@ -43,7 +43,9 @@ def load_dump(fp, db):
             data = next(items)
             attachments[name]['data'] = data
             del attachments[name]['stub']
-        db.save_doc(item)
+        db.save_doc(item, batch='ok')
+
+    db.ensure_full_commit()
 
 
 
