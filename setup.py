@@ -4,6 +4,7 @@ setup(
     get_version_from_hg=True,
 
     description='py.test extension for per-test couchdb databases using couchdbkit',
+    long_description=open("CHANGELOG").read(),
 
     author='RonnyPfannschmidt',
     author_email='ronny.pfannschmidt@gmx.de',
@@ -19,7 +20,7 @@ setup(
         ]
     },
 
-    requires=[
+    install_requires=[
         'pytest',
         'couchdbkit',
     ],
