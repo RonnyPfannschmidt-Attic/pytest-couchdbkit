@@ -45,7 +45,7 @@ def load_dump(fp, db):
 
 def writechunk(fp, data):
     if isinstance(data, dict):
-        data = json.dumps(data, indent=2)
+        data = json.dumps(data, indent=2, sort_keys=True)
     fp.write('%s\r\n' % (len(data)))
     fp.write(data)
     fp.write('\r\n')
