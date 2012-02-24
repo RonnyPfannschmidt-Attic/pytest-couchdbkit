@@ -9,7 +9,7 @@ setup(
     author='RonnyPfannschmidt',
     author_email='ronny.pfannschmidt@gmx.de',
 
-    url='http://bitbucket.prg/RonnyPfannschmidt/pytest-couchdbkit',
+    url='http://bitbucket.org/RonnyPfannschmidt/pytest-couchdbkit',
     packages=[
         'pytest_couchdbkit',
     ],
