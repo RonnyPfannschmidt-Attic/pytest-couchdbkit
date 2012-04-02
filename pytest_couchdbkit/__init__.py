@@ -19,8 +19,11 @@ def pytest_funcarg__couchdb(request):
     if not suffix:
         pytest.fail('no couchdbkit_suffix set in ini')
     dbname = 'pytest_' + suffix
-    db = server.get_or_create_db(dbname)
-    db.flush()
+
+    if dbname in server.all_dbs():
+        servere.delete_db(dbname)
+    db = server.create_db(dbname)
+
 
     def finalize_db():
         with tmpdir.join('couchdb.dump').open('w') as fp:
