@@ -21,7 +21,7 @@ def pytest_funcarg__couchdb(request):
     dbname = 'pytest_' + suffix
 
     if dbname in server.all_dbs():
-        servere.delete_db(dbname)
+        server.delete_db(dbname)
     db = server.create_db(dbname)
 
 
