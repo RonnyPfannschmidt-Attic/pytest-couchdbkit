@@ -2,7 +2,7 @@ from io import BytesIO
 import json
 import re
 
-from couchdbkit import View, ViewResults
+from couchdbkit import ViewResults
 
 def items(db):
     rows = db.all_docs(include_docs='true')

@@ -12,7 +12,6 @@ def pytest_funcarg__couchdb_server(request):
     return Server(backend=request.config.getini('couchdbkit_backend'))
 
 def pytest_funcarg__couchdb(request):
-    from couchdbkit import ViewResults, View
     server = request.getfuncargvalue('couchdb_server')
     tmpdir = request.getfuncargvalue('tmpdir')
     suffix = request.config.getini('couchdbkit_suffix')
