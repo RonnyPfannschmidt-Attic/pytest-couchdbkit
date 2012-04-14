@@ -23,6 +23,11 @@ def test_items_simple(couchdb):
     assert data == 'data'
 
 
+def test_ddoc(couchdb):
+    ddoc = {'_id': '_design/test'}
+    couchdb.save_doc(ddoc)
+    ddocs = list(items(couchdb))
+    assert ddocs == [ddoc]
 
 def test_dump_load(couchdb_server):
     db = couchdb_server.get_or_create_db('test_dumping_db')
