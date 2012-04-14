@@ -29,22 +29,21 @@ def test_ddoc(couchdb):
     ddocs = list(items(couchdb))
     assert ddocs == [ddoc]
 
-def test_dump_load(couchdb_server):
-    db = couchdb_server.get_or_create_db('test_dumping_db')
-    db.flush()
-    assert db.info()['doc_count'] == 0
+def test_dump_load(couchdb):
+    assert couchdb.info()['doc_count'] == 0
     doc = {'_id': 'test'}
-    db.save_doc(doc)
-    assert db.info()['doc_count'] == 1
-    db.put_attachment(doc, 'test a', name='a.py')
-    db.put_attachment(doc, 'test b', name='b.py')
+    couchdb.save_doc(doc)
+    assert couchdb.info()['doc_count'] == 1
+    couchdb.put_attachment(doc, 'test a', name='a.py')
+    couchdb.put_attachment(doc, 'test b', name='b.py')
     io = BytesIO()
-    dump_db(db, io)
-    db.flush()
-    assert db.info()['doc_count'] == 0
+    dump_db(couchdb, io)
+    couchdb.server.delete_db(couchdb.dbname)
+    couchdb.server.create_db(couchdb.dbname)
+    assert couchdb.info()['doc_count'] == 0
     io.seek(0)
-    load_dump(io, db)
+    load_dump(io, couchdb)
 
-    assert db.info()['doc_count'] == 1
-    assert db.fetch_attachment('test', 'a.py') == 'test a'
-    assert db.fetch_attachment('test', 'b.py') == 'test b'
+    assert couchdb.info()['doc_count'] == 1
+    assert couchdb.fetch_attachment('test', 'a.py') == 'test a'
+    assert couchdb.fetch_attachment('test', 'b.py') == 'test b'
