@@ -7,6 +7,12 @@ def pytest_addoption(parser):
     parser.addini('couchdbkit_backend', 'socketpool backend we should use', default='thread')
     parser.addini('couchdbkit_suffix', 'database name suffix')
 
+
+def pytest_addhooks(pluginmanager):
+    from . import hookspec
+    pluginmanager.addhooks(hookspec)
+
+
 def pytest_funcarg__couchdb_server(request):
     from couchdbkit import Server
     return Server(backend=request.config.getini('couchdbkit_backend'))
