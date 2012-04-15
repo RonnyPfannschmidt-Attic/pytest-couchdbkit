@@ -33,7 +33,7 @@ def pytest_funcarg__couchdb(request):
     db = maybe_destroy_and_create(server, dbname)
 
     if db_source in server.all_dbs():
-        server.replicate(db_source, db_name)
+        server.replicate(db_source, dbname)
     
     def finalize_db():
         with tmpdir.join('couchdb.dump').open('w') as fp:

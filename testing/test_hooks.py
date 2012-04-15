@@ -1,4 +1,5 @@
 import pytest_couchdbkit
+from pytest_couchdbkit.utils import maybe_destroy_and_create
 import couchdbkit
 import mock
 import json
@@ -33,4 +34,13 @@ def test_database_dumping(request, tmpdir):
     finalizer()
     assert tmpdir.join('couchdb.dump').check()
 
+
+def test_replication(request, tmpdir):
+    server = pytest_couchdbkit.pytest_funcarg__couchdb_server(request)
+    db_source = maybe_destroy_and_create(server, 'pytest_test_couchapp_source')
+    db_source.save_doc({'_id': 'test'})
+
+
+    db = pytest_couchdbkit.pytest_funcarg__couchdb(request)
+    assert 'test' in db
 
