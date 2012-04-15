@@ -10,6 +10,13 @@ Additionally you may use `couchdbkit_backend` to select
 the gevent/eventlet backends.
 
 
+To setup couchapps before running the tests,
+there is the `pytest_couchdbkit_push_app(server, dbname)` hook
+
+It can be used to create a pristine database,
+which is replicated into each test database.
+
+
 
 The provided funcarg `couchdb` will be a freshly flushed database
 named `pytest_` + couchdbkit_suffix,
@@ -43,6 +50,11 @@ Future
 
 CHANGELOG
 =========
+
+from 0.4 to 0.4
+---------------
+
+- add pytest_couchdbkit_push_app hook
 
 from 0.2 to 0.3
 ---------------
