@@ -14,10 +14,14 @@ def pytest_addhooks(pluginmanager):
     from . import hookspec
     pluginmanager.addhooks(hookspec)
 
+def pytest_sessionstart(session):
+    server = server_from_config(session.config)
+    dbname = dbname_from_config(session.config, 'pytest_%s_couchapp_source')
+    #db = maybe_destroy_and_create(server, dbname)
+    session.config.hook.pytest_couchdbkit_push_app(server=server, dbname=dbname)
 
 def pytest_funcarg__couchdb_server(request):
     return server_from_config(request.config)
-
 
 
 def pytest_funcarg__couchdb(request):
@@ -25,9 +29,12 @@ def pytest_funcarg__couchdb(request):
     tmpdir = request.getfuncargvalue('tmpdir')
 
     dbname = dbname_from_config(request.config, 'pytest_%s')
+    db_source = dbname_from_config(request.config, 'pytest_%s_couchapp_source')
     db = maybe_destroy_and_create(server, dbname)
 
-
+    if db_source in server.all_dbs():
+        server.replicate(db_source, db_name)
+    
     def finalize_db():
         with tmpdir.join('couchdb.dump').open('w') as fp:
             dump_db(db, fp)
