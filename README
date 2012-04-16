@@ -51,7 +51,7 @@ Future
 CHANGELOG
 =========
 
-from 0.4 to 0.4
+from 0.3 to 0.4
 ---------------
 
 - add pytest_couchdbkit_push_app hook
