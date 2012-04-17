@@ -1,3 +1,4 @@
+import pytest
 from .dumper import dump_db
 from .utils import server_from_config, dbname_from_config, \
         maybe_destroy_and_create
@@ -12,10 +13,15 @@ def pytest_addhooks(pluginmanager):
     pluginmanager.addhooks(hookspec)
 
 def pytest_sessionstart(session):
-    server = server_from_config(session.config)
-    dbname = dbname_from_config(session.config, 'pytest_%s_couchapp_source')
-    #db = maybe_destroy_and_create(server, dbname)
-    session.config.hook.pytest_couchdbkit_push_app(server=server, dbname=dbname)
+    try:
+        dbname = dbname_from_config(session.config, 'pytest_%s_couchapp_source')
+    except pytest.xfail.Exception:
+        pass # we are not configured
+    else:
+        server = server_from_config(session.config)
+        session.config.hook.pytest_couchdbkit_push_app(
+                server=server,
+                dbname=dbname)
 
 def pytest_funcarg__couchdb_server(request):
     return server_from_config(request.config)
