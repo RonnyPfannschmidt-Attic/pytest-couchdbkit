@@ -13,6 +13,9 @@ def pytest_addhooks(pluginmanager):
     pluginmanager.addhooks(hookspec)
 
 def pytest_sessionstart(session):
+    slaveinput = getattr(session.config, 'slaveinput', None)
+    if slaveinput is not None:
+        return
     try:
         dbname = dbname_from_config(session.config, 'pytest_%s_couchapp_source')
     except pytest.xfail.Exception:
@@ -33,8 +36,10 @@ def pytest_funcarg__couchdb(request):
 
     dbname = dbname_from_config(request.config, 'pytest_%s')
     db_source = dbname_from_config(request.config, 'pytest_%s_couchapp_source')
+    slaveinput = getattr(request.config, 'slaveinput', None)
+    if slaveinput is not None:
+        dbname = '%s_%s' % (dbname, slaveinput['slaveid'])
     db = maybe_destroy_and_create(server, dbname)
-
     if db_source in server.all_dbs():
         server.replicate(db_source, dbname)
     

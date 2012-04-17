@@ -20,6 +20,7 @@ which is replicated into each test database.
 
 The provided funcarg `couchdb` will be a freshly flushed database
 named `pytest_` + couchdbkit_suffix,
+
 additionally, after each test item,
 the database will be dumped to tmpdir.join(couchdb.dump)
 
@@ -56,6 +57,9 @@ from 0.4 to 0.5
 
 - fix breaking testruns that dont actually use it
 - add a lot of tests i should have done before 0.4
+- add support for pytest-xdist,
+  if a slave is detected, push_app wont be called,
+  and dbname gets the gw id appended
 
 from 0.3 to 0.4
 ---------------
