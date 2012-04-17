@@ -1,3 +1,4 @@
+import pytest
 
 def server_from_config(config):
     from couchdbkit import Server
@@ -7,7 +8,7 @@ def server_from_config(config):
 def dbname_from_config(config, fmt):
     suffix = config.getini('couchdbkit_suffix')
     if not suffix:
-        pytest.fail('no couchdbkit_suffix set in ini')
+        pytest.xfail('no couchdbkit_suffix set in ini')
     return fmt % (suffix,)
 
 
