@@ -34,6 +34,21 @@ def test_database_dumping(request, tmpdir):
     assert tmpdir.join('couchdb.dump').check()
 
 
+def test_sessionstart_handles_missing_dbconfig_gracefull():
+    session = mock.Mock()
+    session.config.getini.side_effect = {}.get
+    pytest_couchdbkit.pytest_sessionstart(session)
+
+
+def test_sessionstart_with_config_calls_hook():
+    settings = {'couchdbkit_suffix':'test'}
+    session = mock.Mock()
+    session.config.getini.side_effect = settings.get
+    pytest_couchdbkit.pytest_sessionstart(session)
+    call_args = session.config.hook.pytest_couchdbkit_push_app.call_args
+    assert call_args[1]['dbname'] == 'pytest_test_couchapp_source'
+
+
 def test_replication(request, tmpdir):
     server = pytest_couchdbkit.pytest_funcarg__couchdb_server(request)
     db_source = maybe_destroy_and_create(server, 'pytest_test_couchapp_source')

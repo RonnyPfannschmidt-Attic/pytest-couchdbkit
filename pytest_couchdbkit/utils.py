@@ -2,7 +2,7 @@ import pytest
 
 def server_from_config(config):
     from couchdbkit import Server
-    backend = config.getini('couchdbkit_backend')
+    backend = config.getini('couchdbkit_backend') or 'thread'
     return Server(backend=backend)
 
 def dbname_from_config(config, fmt):
