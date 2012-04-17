@@ -1,8 +1,4 @@
-from io import BytesIO
 import json
-import re
-
-from couchdbkit import ViewResults
 
 def items(db):
     rows = db.all_docs(include_docs='true')
@@ -29,7 +25,7 @@ def iter_dump(fp):
 
 def load_dump(fp, db):
     items = iter_dump(fp)
-    info = next(items)
+    next(items) # drop db info
     for doc in items:
         item = json.loads(doc)
         del item['_rev']
