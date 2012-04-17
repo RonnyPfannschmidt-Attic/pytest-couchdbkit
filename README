@@ -51,6 +51,12 @@ Future
 CHANGELOG
 =========
 
+from 0.4 to 0.5
+---------------
+
+- fix breaking testruns that dont actually use it
+- add a lot of tests i should have done before 0.4
+
 from 0.3 to 0.4
 ---------------
 
