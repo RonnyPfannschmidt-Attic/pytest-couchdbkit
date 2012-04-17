@@ -17,7 +17,7 @@ def pytest_funcarg__request(request):
     request.config.getini.side_effect = settings.get
     request.getfuncargvalue.side_effect = lambda name: funcargs(name, request)
     request.tmpdir = tmpdir
-    request.slaveinput = None
+    request.config.slaveinput = None
     return request
 
 
@@ -36,7 +36,7 @@ def test_database_dumping(request, tmpdir):
     assert tmpdir.join('couchdb.dump').check()
 
 def test_database_on_slavenode(request):
-    request.slaveinput= {'slaveid': 'gw1'}
+    request.config.slaveinput = {'slaveid': 'gw1'}
     db = pytest_couchdbkit.pytest_funcarg__couchdb(request)
     assert 'gw1' in db.dbname
 
@@ -48,7 +48,7 @@ def test_sessionstart_handles_missing_dbconfig_gracefull():
 
 
 def test_sessionstart_with_config_calls_hook():
-    settings = {'couchdbkit_suffix':'test'}
+    settings = {'couchdbkit_suffix': 'test'}
     session = mock.Mock()
     session.config.getini.side_effect = settings.get
     session.config.slaveinput = None
