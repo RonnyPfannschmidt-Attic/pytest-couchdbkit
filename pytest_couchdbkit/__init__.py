@@ -1,6 +1,3 @@
-import json
-import pytest
-
 from .dumper import dump_db
 from .utils import server_from_config, dbname_from_config, \
         maybe_destroy_and_create
