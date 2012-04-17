@@ -2,9 +2,8 @@ import pytest_couchdbkit
 from pytest_couchdbkit.utils import maybe_destroy_and_create
 import couchdbkit
 import mock
-import json
-settings = {'couchdbkit_suffix': 'test', 'couchdbkit_backend': 'thread'}
 
+settings = {'couchdbkit_suffix': 'test', 'couchdbkit_backend': 'thread'}
 
 def funcargs(name, request):
     if name == 'couchdb_server':
@@ -28,7 +27,7 @@ def test_server_funcarg(request):
 def test_database_dumping(request, tmpdir):
     db = pytest_couchdbkit.pytest_funcarg__couchdb(request)
     print db.info()
-    db.save_doc({'_id': 'test'})
+    db.save_doc({'_id': 'test'}, force_update=True)
     finalizer = request.addfinalizer.call_args[0][0]
     assert not tmpdir.join('couchdb.dump').check()
     finalizer()
