@@ -25,6 +25,8 @@ def pytest_sessionstart(session):
         session.config.hook.pytest_couchdbkit_push_app(
                 server=server,
                 dbname=dbname)
+        if dbname in server:
+            server[dbname].compact()
 
 def pytest_funcarg__couchdb_server(request):
     return server_from_config(request.config)
