@@ -6,6 +6,8 @@ from .utils import server_from_config, dbname_from_config, \
 def pytest_addoption(parser):
     parser.addini('couchdbkit_backend', 'socketpool backend we should use', default='thread')
     parser.addini('couchdbkit_suffix', 'database name suffix')
+    parser.addoption('--couchdb-no-push', action='store_true',
+                     help='disable initial app push')
 
 
 def pytest_addhooks(pluginmanager):
@@ -13,6 +15,8 @@ def pytest_addhooks(pluginmanager):
     pluginmanager.addhooks(hookspec)
 
 def pytest_sessionstart(session):
+    if session.config.option.couchdb_no_push:
+        return
     slaveinput = getattr(session.config, 'slaveinput', None)
     if slaveinput is not None:
         return

@@ -1,7 +1,8 @@
+import mock
+import pytest
+import couchdbkit
 import pytest_couchdbkit
 from pytest_couchdbkit.utils import maybe_destroy_and_create
-import couchdbkit
-import mock
 
 settings = {'couchdbkit_suffix': 'test', 'couchdbkit_backend': 'thread'}
 
@@ -67,6 +68,16 @@ def test_sessionstart_on_slave_does_nothing():
     hook = session.config.hook.pytest_couchdbkit_push_app
     assert not hook.called
 
+@pytest.mark.parametrize('set_no_push', [True, False])
+def test_sessionstart_with_no_push_does_nothing(set_no_push):
+    settings = {'couchdbkit_suffix':'test'}
+    session = mock.Mock()
+    session.config.getini.side_effect = settings.get
+    hook = session.config.hook.pytest_couchdbkit_push_app
+    
+    session.config.option.couchdb_no_push = set_no_push
+    pytest_couchdbkit.pytest_sessionstart(session)
+    assert hook.called != set_no_push
 
 
 def test_replication(request, tmpdir):
