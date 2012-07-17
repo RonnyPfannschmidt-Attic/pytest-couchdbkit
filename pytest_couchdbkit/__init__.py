@@ -1,10 +1,14 @@
 import pytest
+import os
 from .dumper import dump_db
 from .utils import server_from_config, dbname_from_config, \
         maybe_destroy_and_create
 
 def pytest_addoption(parser):
-    parser.addini('couchdbkit_backend', 'socketpool backend we should use', default='thread')
+    parser.addini('couchdbkit_backend',
+                  'socketpool backend we should use\n'
+                  'defaults to $COUCHDBKIT_BACKEND or thread',
+                  default=os.environ.get("COUCHDBKIT_BACKEND", 'thread'))
     parser.addini('couchdbkit_suffix', 'database name suffix')
     parser.addoption('--couchdb-no-push', action='store_true',
                      help='disable initial app push')
